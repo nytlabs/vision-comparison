@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="result.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script language = "javascript">
+
+function formatScore(score){
+    var result = Math.round(score*1000);
+    //result = result * 100;
+    result = result/10 + "%";
+    return result;
+}
+
+$.ajax({
+    url: "http://localhost:28017/test/images/",
+    type: "GET",
+    crossDomain: 'true',
+    dataType: 'jsonp',
+    jsonp: 'jsonp'
+})
+    .done (function(json) {
+        //json = JSON.parse(data);
+        $.each(json.rows, function(i, pic) {
+        	rowid = "row" + i
+        	row = $("#output").append("<br class='clear' /><div class='row' id='"+rowid+"'>");
+        	$("#"+rowid).append("<div class='imagebox'><img src='"+pic.filename+"' /></div>");
+
+            //watson data
+        	$("#"+rowid).append("<div class='result watson' id='watson"+rowid+"'></div>");
+            $("#watson"+rowid).append("<div class='tags'><div class='head'>Watson</div></div>");
+            $("#watson"+rowid).append("<div class='tags'><div class='subhead'>Tags</div></div>");
+            $.each(pic.watson.tags, function(n, word) {
+        		paraid = "watsontag" + i + "-" + n;
+        		$("#watson"+rowid).append("<p id='"+paraid+"'></p>");
+        		$("#"+paraid).append(word.name + " : " + formatScore(word.score));
+        	});
+
+            //msft data
+            $("#"+rowid).append("<div class='result msft' id='msft"+rowid+"'></div>");
+            $("#msft"+rowid).append("<div class='tags'><div class='head'>Microsoft</div></div>");
+            $("#msft"+rowid).append("<div class='tags'><div class='subhead'>Tags</div></div>");
+            $.each(pic.msft.tags, function(n, word) {
+                paraid = "msfttag" + i + "-" + n;
+                $("#msft"+rowid).append("<p id='"+paraid+"'>");
+                $("#"+paraid).append(word.name + " : " + formatScore(word.score));
+            });
+            $("#msft"+rowid).append("<div class='colors'><div class='subhead'>Colors</div></div>");
+            $.each(pic.msft.colors, function(n, col) {
+                paraid = "msftcolor" + i + "-" + n;
+                $("#msft"+rowid).append("<div class='colorblock' id='"+paraid+"'></div>");
+                $("#"+paraid).css("background-color", col.color);
+                var bgcolor = '0x' + col.color.slice(1);
+                var textcolor = ('000000' + (('0xffffff' ^ bgcolor).toString(16))).slice(-6);
+                $("#"+paraid).css("color", "#"+textcolor);
+                $("#"+paraid).append("<p>"+formatScore(col.score)+"</p>");
+            });
+            $("#msft"+rowid).append("<div class='adult'><div class='subhead'>Adult</div></div>");
+            $.each(pic.msft.adult, function(key, value){
+                paraid = "msftadult" + i + '-' + key;
+                $("#msft"+rowid).append("<p id='"+paraid+"'>");
+                if((typeof value === 'boolean') || isNaN(value)){
+                    $("#"+paraid).append(key +" : "+value);
+                }
+                else{
+                    $("#"+paraid).append(key +" : "+formatScore(value));
+                } 
+            });
+            $("#msft"+rowid).append("<div class='captions'><div class='subhead'>Captions</div></div>");
+            $.each(pic.msft.captions, function(n, blob){
+                paraid = "msfttext" + i + '-' + n;
+                $("#msft"+rowid).append("<p id='"+paraid+"'>");
+                $("#"+paraid).append(blob.text +" : "+formatScore(blob.score));
+            });
+            //to do: bounding boxes on faces
+            $("#msft"+rowid).append("<div class='people'><div class='subhead'>People</div></div>");
+            $.each(pic.msft.people, function(n, blob){
+                paraid = "msftperson" + i + '-' + n;
+                $("#msft"+rowid).append("<p id='"+paraid+"'>");
+                $("#"+paraid).append(blob.name +" : "+formatScore(blob.confidence));
+            });
+
+            //google data
+            $("#"+rowid).append("<div class='result google' id='google"+rowid+"'></div>");
+            $("#google"+rowid).append("<div class='tags'><div class='head'>Google</div></div>");
+            $("#google"+rowid).append("<div class='tags'><div class='subhead'>Tags</div></div>");
+            $.each(pic.google.tags, function(n, word) {
+                paraid = "googlepara" + i + "-" + n;
+                $("#google"+rowid).append("<p id='"+paraid+"'>");
+                $("#"+paraid).append(word.name + " : " + formatScore(word.score));
+            });
+            $("#google"+rowid).append("<div class='colors'><div class='subhead'>Colors</div></div>");
+            $.each(pic.google.colors, function(n, col) {
+                paraid = "googlecolor" + i + "-" + n;
+                $("#google"+rowid).append("<div class='colorblock' id='"+paraid+"'></div>");
+                $("#"+paraid).css("background-color", col.color);
+                var bgcolor = '0x' + col.color.slice(1);
+                var textcolor = ('000000' + (('0xffffff' ^ bgcolor).toString(16))).slice(-6);
+                $("#"+paraid).css("color", "#"+textcolor);
+                $("#"+paraid).append("<p>"+formatScore(col.score)+"</p>");
+            });
+            $("#google"+rowid).append("<div class='adult'><div class='subhead'>Adult</div></div>");
+            $.each(pic.google.adult, function(key, value){
+                paraid = "googleadult" + i + '-' + key;
+                $("#google"+rowid).append("<p id='"+paraid+"'>");
+                if(isNaN(value)){
+                    $("#"+paraid).append(key +" : "+value);
+                }
+                else{
+                    $("#"+paraid).append(key +" : "+formatScore(value));
+                }   
+            });
+            $("#google"+rowid).append("<div class='text'><div class='subhead'>Text</div></div>");
+            $.each(pic.google.text, function(n, blob){
+                paraid = "googletext" + i + '-' + n;
+                if (blob.locale) {
+                    //todo: bounding boxes on text
+                    $("#google"+rowid).append("<p id='"+paraid+"'>");
+                    $("#"+paraid).append(blob.text +"["+blob.locale+"]");
+                }
+            });
+        });
+    });
+
+</script>
+</head>
+<body>
+
+<div id="output"></div>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "vision-comparison",
+  "version": "0.0.1",
+  "description": "Utility for comparing vision APIs from Microsoft, Google, and IBM Watson (so far).",
+  "main": "image-test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nytlabs/vision-comparison/"
+  },
+  "keywords": [
+    "ai",
+    "vision",
+    "api",
+    "image tagging"
+  ],
+  "author": "nytlabs",
+  "license": "Apache",
+  "dependencies": {
+    "fs": "0.0.2",
+    "watson-developer-cloud": "^1.4.1",
+    "gcloud": "^0.31.0",
+    "path": "^0.12.7",
+    "mongodb": "^2.1.16",
+    "request": "^2.72.0",
+    "assert": "^1.3.0"
+  }
+}
