@@ -7,7 +7,7 @@ Since `node_modules` is ignored by git, first create a `node_modules` directory,
 ### Batch processor
 `image-test.js` is a node application that will use a directory of images you define to blast each of the APIs with each of the images in that directory. *Note:* you will also need to zip your directory into a zipfile of the same name (i.e. if your directory is called "input", use `zip -r input.zip input` to make the appropriate archive).
 
-To run the batch processor, just type `node image-test.js <input-dir>`.
+To run the batch processor, just type `node image-test.js <input-dir>` with no slashes. At the moment, this only works if `image-test.js` is in the same directory as your input directory, so your command line will be something like `node image-test.js pics`.
 
 At this time, image-test.js does not terminate on its own, because of async processing across several APIs being a hellish development issue. When the output of the log reads `Google: inserting for pointer N` (where N = the number of images in your directory) the program should hang; give it a sec to make sure Microsoft is also done (Watson works on the zip file and therefore returns much more predictably) and press `ctrl-c` to quit.
 
