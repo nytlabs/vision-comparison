@@ -4,6 +4,8 @@ This project shows the different capabilities and responses of Google, Microsoft
 ### Installation
 Since `node_modules` is ignored by git, first create a `node_modules` directory, then `mv rgbcolor.js node_modules/.` to put that in the right place. You'll then need to run `npm install` to get the rest of what you need. There's a package.json here that will include all the requisite dependencies. (This will take a lot longer than you might think; the APIs often have to install lots of their own dependencies, and even compile things. You may need a FORTRAN compiler [seriously].)
 
+You'll also need to start a local mongodb, as that's where we'll store our results. If you're on a modern Mac, you should be able to do this quite simply: `mongod --rest --jsonp --config /usr/local/etc/mongod.conf`. (The `--rest` and `--jsonp` flags will be used to serve results later on.)
+
 ### Batch processor
 `image-test.js` is a node application that will use a directory of images you define to blast each of the APIs with each of the images in that directory. *Note:* you will also need to zip your directory into a zipfile of the same name (i.e. if your directory is called "input", use `zip -r input.zip input` to make the appropriate archive).
 
