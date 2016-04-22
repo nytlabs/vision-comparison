@@ -1,5 +1,5 @@
 # Vision API Comparator
-This project shows the different capabilities and responses of Google, Microsoft, and IBM Watson's vision APIs. It works in two _extremely_ loosely connected parts:
+This project shows the different capabilities and responses of Google, Microsoft, and IBM Watson's vision APIs. It works in two _extremely_ loosely connected parts: a batch processor and a results display.
 
 ### Installation
 Since `node_modules` is ignored by git, first create a `node_modules` directory, then `mv rgbcolor.js node_modules/.` to put that in the right place. You'll then need to run `npm install` to get the rest of what you need. There's a package.json here that will include all the requisite dependencies. (This will take a lot longer than you might think; the APIs often have to install lots of their own dependencies, and even compile things. You may need a FORTRAN compiler [seriously].)
