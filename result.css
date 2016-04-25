@@ -1,16 +1,43 @@
+body {
+  margin: 0;
+}
+
 #output {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size:1em;
+	color: #333;
+
+}
+
+.row-container:nth-child(even) {background: #FBFBFB}
+.row-container:nth-child(odd) {background: #FEFEFE}
+
+@media only screen and (max-width: 1024px) {
+	.row { width: calc(100% - 40px) !important; 
+		padding-left: 20px; 
+		padding-right: 20px;}
+}
+
+
+@media only screen and (max-width: 480px) {
+	.row { width: calc(100% - 40px) !important; 
+		padding-left: 20px; 
+		padding-right: 20px;}
+	.col {  margin: 1% 0 1% 0% !important ; }
+	.span_3_of_3, .span_2_of_3, .span_1_of_3 { width: 100% !important; }
 }
 
 .imagebox {
-	margin:50px auto;
-	width:70%;
-	display:block;
+	width: 100%;
+	margin-top: 1em;
+	margin-bottom: 1em;
 }
 
-img {
+.imagebox img{
+	display: block;
+	margin: 0 auto;
 	max-width:100%;
+	max-height: 768px;
 }
 
 p {
@@ -18,38 +45,88 @@ p {
 	padding: 0px;
 }
 
+.row-container {
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
 .row {
-	display:block;
-	width:100%;
+	width: 1024px;
+	margin-right: auto;
+	margin-left: auto;	
+	overflow: hidden;
 }
 
-.head {
-	text-align: center;
-	font-weight:bold;
-	background-color:#999;
-	text-transform: uppercase;
+/*  COLUMN SETUP  */
+.col {
+	display: block;
+	float:left;
+	margin: 1% 0 1% 2%;
+}
+.col:first-child { margin-left: 0; }
 
+/*  GRID OF THREE  */
+.span_3_of_3 { width: 100%; }
+.span_2_of_3 { width: 66%; }
+.span_1_of_3 { width: 32%; }
+
+.title {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
 }
 
-.subhead {
-	text-align: center;
-	background-color:#ccc;
+.results {
+	clear: both;
+	padding: 0px;
+	margin: 0px;
 }
 
-.result {
-	width: 31%;
-	float: left;
-	display: inline;
-	margin: 1%;
-	border:1px solid #ccc;
+.result h1 {
+	font-size: 1em;
+	text-align: left;
+	font-weight:500;
+	margin: 0 0 1em 0;
+	padding-bottom: 0.75em;
+	border-bottom: 2px solid #BBB;
 }
+
+.result h2 {
+	text-align: left;
+	font-weight: 400;
+	font-size: 1em;
+	font-weight: normal;
+	margin: 0 0 0.5em 0;
+}
+
+.result > ul, .result > div {
+	margin-top: 0;
+	margin-bottom: 1em;
+/*	margin-left: 2em;
+*/	font-weight: 300;
+	color: #333;
+}
+
+.result ul {
+	padding: 0;
+}
+
+.result li {
+	list-style: none;
+	padding-bottom: 0.33em;
+}
+
 
 .colorblock {
+	display: inline-block;
 	font-size:0.8em;
-	display:inline-block;
-	width:40px;
-	height:30px;
-	text-align:center;
+	width:46.81px;
+	height:35.10px;
+	text-align: center;
+
+}
+
+.colorblock > span {
+	vertical-align: middle;
+	line-height: 35.10px;
 }
 .clear {
 	clear: both;
