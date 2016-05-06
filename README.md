@@ -15,7 +15,7 @@ At this time, image-test.js does not terminate on its own, because of async proc
 
 `image-test.js` puts its results into a mongo database, whose location is defined in `mongourl` at the top of the js file.
 
-Note that you must provide the necessary auth tokens in the config.js file. A sample is provided here in the repo; for actual docs / keys, see the NYTLABS Google Drive.
+Note that you must provide the necessary auth tokens in the config.js file. A sample is provided here in the repo; for actual docs / keys, sign up for the relevant accounts (or see the NYTLABS Google Drive).
 
 ### Result display
 Here I cheated a bit: `result.html` is the file to serve, which reads from the mongo database to show the comparative tags / data. This file also needs access to your original input directory, as above, so that it can serve the images atop the data each API extracted for it.
