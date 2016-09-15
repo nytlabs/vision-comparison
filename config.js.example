@@ -2,6 +2,6 @@ module.exports = {
   "auth" : { 
   	"google" : "./path/to/auth/file",
   	"msft" : "api-key",
-  	"watson" : {"username" : "longer-dashed-key" , "password" : "shorter-password" }
+  	"watson" : "api-key"
   }
 }

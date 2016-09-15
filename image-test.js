@@ -2,8 +2,8 @@
 
 var fs = require('fs');
 var RGBColor = require('RGBcolor')
-var watson = require('watson-developer-cloud');
-var gcloud = require('gcloud');
+var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
+var gcloud = require('google-cloud');
 var path = require('path');
 //prereqs for Mongo
 var MongoClient = require('mongodb').MongoClient;
@@ -19,8 +19,7 @@ var request = require('request');
 var config = require('./config');
 var GOOGKEYFILE = config.auth.google;
 var MSFTCVAPIKEY = config.auth.msft;
-var WATSONUSERNAME = config.auth.watson.username;
-var WATSONPASSWORD = config.auth.watson.password;
+var WATSONAPIKEY = config.auth.watson;
 
 var DOMCOLOR = 0.5;
 var ACCCOLOR = 0.3;
@@ -28,12 +27,9 @@ var ACCCOLOR = 0.3;
 function askWatson(archivefile, db) {
 // TODO -- refactor this to do it one by one as the others do, instead of the zip file kludge
 
-  var visual_recognition = watson.visual_recognition({
-    url: "https://gateway.watsonplatform.net/visual-recognition-beta/api",
-    password: WATSONPASSWORD,
-    username: WATSONUSERNAME,
-    version: 'v2-beta',
-    version_date: '2015-12-02'
+var visual_recognition = new VisualRecognitionV3({
+    api_key: WATSONAPIKEY,
+    version_date: '2016-05-19'
   });
 
   var params = {
@@ -52,14 +48,15 @@ function askWatson(archivefile, db) {
         // start with tags
         var taglist = [];
         console.log(JSON.stringify(res.images[i]));
-        for(var s in res.images[i]['scores']) {
-          taglist.push({'name':res.images[i]['scores'][s]['name'], 'score':res.images[i]['scores'][s]['score']});
+
+        for(var s in res.images[i]['classifiers'][0]['classes']) {
+          taglist.push({'name':res.images[i]['classifiers'][0]['classes'][s]['class'], 'score':res.images[i]['classifiers'][0]['classes'][s]['score']});
         }
         watson['tags'] = taglist;
         // console.log(res.images[i]['image']);
-        // console.log(watson);
+        console.log();
 
-        db.collection('images').updateOne({"filename":res.images[i]['image']},{ $set: {"watson": watson}},{upsert:true}, function(err,results) {
+        db.collection('images').updateOne({"filename":res.images[i]['image'].split('/').slice(1).join('/')},{ $set: {"watson": watson}},{upsert:true}, function(err,results) {
           console.log("E: "+err);
           console.log("R: "+results); //{"filename":res.images[i]['image']}
         });
@@ -69,7 +66,7 @@ function askWatson(archivefile, db) {
 
 function askGoogle(imagefiles, db) {
   var vision = gcloud.vision({
-    projectId: 'NYT-RND',
+    projectId: 'nytint-prd',
     keyFilename: GOOGKEYFILE
   });
 
@@ -82,7 +79,7 @@ function askGoogle(imagefiles, db) {
   //uses an array of the image files
     vision.detect(imagefiles[pointer], types, function(err, detections, apiResponse) {
       // for each image, store detections in Mongo
-      //console.log('{"image":"'+imagefiles[i]+'","googresponse":'+JSON.stringify(apiResponse)+"}");
+      console.log('{"image":"'+imagefiles[pointer]+'","googresponse":'+JSON.stringify(apiResponse)+"}");
       var goog = {"tags":[], "colors":[], "adult":{}, "text":[], "landmarks":[]}; //figure out how to add/see celebrities later. I think it's in faces.
       for (var x in apiResponse.responses) {
 
